@@ -12,7 +12,7 @@ class Display(QtGui.QWidget):
 
         self.split = QtGui.QSplitter(Qt.Vertical, parent)
 
-        # self.split.setStretchFactor(0, 1)
+        self.split.setStretchFactor(9, 1)
         self.up = QtGui.QLabel(self.split)
         self.up.setAlignment(Qt.AlignCenter)
         self.down = QtGui.QLabel(self.split)
@@ -41,6 +41,6 @@ class Display(QtGui.QWidget):
         pix = QtGui.QPixmap(file_path)
         pix = pix.scaledToHeight(200)
         self.up.setPixmap(pix)
-
+        ### TODO PROCESS FACE DETECTION ALGORITHM
 
 

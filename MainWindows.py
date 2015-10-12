@@ -4,13 +4,15 @@ import sys
 from PyQt4 import QtGui, QtCore, Qt
 from Camera import CameraWidget
 from Display import Display
-
+import os
 from PyQt4.QtCore import Qt
 
 class MainWindow(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
+        if os.path.exists('./temp') == False:
+            os.mkdir('./temp')
         self._action()
         self.init()
 
@@ -46,6 +48,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def _action(self):
         self._open_file = QtGui.QAction('open', self)
+        self._open_file.setShortcut('Ctrl+O')
         self._open_file.triggered.connect(self._open)
 
         self._close_file = QtGui.QAction('close', self)
@@ -64,6 +67,9 @@ class MainWindow(QtGui.QMainWindow):
 
 
 if __name__ == '__main__':
+    # import time
+    # print './temp/{}.png'.format(time.time())
+    # print sys.path
     app = QtGui.QApplication(sys.argv)
     main_window = MainWindow()
     main_window.show()

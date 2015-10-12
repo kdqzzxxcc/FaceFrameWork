@@ -3,7 +3,7 @@ __author__ = 'KDQ'
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 import cv2
-
+import time
 
 class OpenCVtoPyQt(QtGui.QImage):
 
@@ -42,6 +42,11 @@ class CameraWidget(QtGui.QWidget):
         else:
             self._start()
             self.pause = False
+
+    def take_photo(self):
+        file_name = './temp/{}.png'.format(time.time())
+        cv2.imwrite(file_name, self.frame)
+        self.parent().right._open(file_name)
 
     # @property
     def _get_frame(self):
