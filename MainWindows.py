@@ -15,7 +15,8 @@ class MainWindow(QtGui.QMainWindow):
         self.init()
 
     def init(self):
-        self.resize(1280, 960)
+        # self.resize(1280, 960)
+        self.resize(500, 500)
         self.setWindowTitle('FaceFrameWork')
 
         # set split layout
@@ -32,8 +33,8 @@ class MainWindow(QtGui.QMainWindow):
         # and show result in it
 
         self.right = Display(self.split)
-        self.split.setStretchFactor(1, 3)
-        
+        self.split.setStretchFactor(1, 2)
+
         self.setCentralWidget(self.split)
 
         # this is menu bar, in this instance, just use one to load pic
@@ -54,6 +55,7 @@ class MainWindow(QtGui.QMainWindow):
         file_name = unicode(QtGui.QFileDialog().getOpenFileName(self,'Open', self.tr(''), self.tr('*')))
         if len(file_name) == 0:
             return False
+        self.right._open(file_name)
         ### TODO READ PIC IN DISPLAY WIDGET
         # Show pic in right widget and process face detection algorithm
 

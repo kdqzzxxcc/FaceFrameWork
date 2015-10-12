@@ -4,6 +4,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 import cv2
 
+
 class OpenCVtoPyQt(QtGui.QImage):
 
     def __init__(self, opencvImg):
