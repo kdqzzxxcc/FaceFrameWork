@@ -15,9 +15,11 @@ class MainWindow(QtGui.QMainWindow):
             os.mkdir('./temp')
         self._action()
         self.init()
+        # self.right._open('./temp/default.jpg')
 
     def init(self):
         self.resize(1280, 960)
+        # print self.width()
         # self.resize(500, 500)
         self.setWindowTitle('FaceFrameWork')
 
