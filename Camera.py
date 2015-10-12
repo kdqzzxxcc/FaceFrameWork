@@ -1,4 +1,4 @@
-__author__ = 'DELL'
+__author__ = 'KDQ'
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
