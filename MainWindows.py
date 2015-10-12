@@ -17,8 +17,8 @@ class MainWindow(QtGui.QMainWindow):
         self.init()
 
     def init(self):
-        # self.resize(1280, 960)
-        self.resize(500, 500)
+        self.resize(1280, 960)
+        # self.resize(500, 500)
         self.setWindowTitle('FaceFrameWork')
 
         # set split layout
@@ -61,9 +61,6 @@ class MainWindow(QtGui.QMainWindow):
         self.right._open(file_name)
         ### TODO READ PIC IN DISPLAY WIDGET
         # Show pic in right widget and process face detection algorithm
-
-
-
 
 
 if __name__ == '__main__':

@@ -7,13 +7,16 @@ import time
 
 class OpenCVtoPyQt(QtGui.QImage):
 
-    def __init__(self, opencvImg):
-        depth, nchannel = opencvImg.depth, opencvImg.nChannels
-        w, h = cv2.cv.GetSize(opencvImg)
-        frame1 = cv2.cv.CreateImage((w, h), depth, nchannel)
-        cv2.cv.CvtColor(opencvImg, frame1, cv2.cv.CV_BGR2RGB)
-        self._imgData = frame1.tostring()
-        super(OpenCVtoPyQt, self).__init__(self._imgData, w, h, QtGui.QImage)
+    def __init__(self, opencvBgrImg):
+        depth, nChannels = opencvBgrImg.depth, opencvBgrImg.nChannels
+        if depth != cv2.cv.IPL_DEPTH_8U or nChannels != 3:
+            raise ValueError("the input image must be 8-bit, 3-channel")
+        w, h = cv2.cv.GetSize(opencvBgrImg)
+        opencvRgbImg = cv2.cv.CreateImage((w, h), depth, nChannels)
+        # it's assumed the image is in BGR format
+        cv2.cv.CvtColor(opencvBgrImg, opencvRgbImg, cv2.cv.CV_BGR2RGB)
+        self._imgData = opencvRgbImg.tostring()
+        super(OpenCVtoPyQt, self).__init__(self._imgData, w, h, QtGui.QImage.Format_RGB888)
 
 
 class CameraWidget(QtGui.QWidget):
