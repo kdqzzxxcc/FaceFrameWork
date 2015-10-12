@@ -15,7 +15,7 @@ class MainWindow(QtGui.QMainWindow):
         self.init()
 
     def init(self):
-        # self.resize(1280, 960)
+        self.resize(1280, 960)
         self.setWindowTitle('FaceFrameWork')
         self.split = QtGui.QSplitter(Qt.Horizontal, self)
         self.left = CameraWidget(self.split)
