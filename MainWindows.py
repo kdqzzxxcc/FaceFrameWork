@@ -33,7 +33,7 @@ class MainWindow(QtGui.QMainWindow):
         # and show result in it
 
         self.right = Display(self.split)
-        self.split.setStretchFactor(1, 2)
+        self.split.setStretchFactor(0, 1)
 
         self.setCentralWidget(self.split)
 
