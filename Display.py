@@ -17,14 +17,13 @@ class Display(QtGui.QWidget):
         # self.uup.setText(QtCore.QString.fromUtf8('照片'))
         # self.split.setStretchFactor(9, 1)
         self.up = QtGui.QLabel(self.split)
-
         self.up.setAlignment(Qt.AlignCenter)
+
         self.down = QtGui.QLabel(self.split)
         self.down.setAlignment(Qt.AlignCenter)
-
-        # self.split.setStretchFactor(0, 7)
-        # self.split.setStretchFactor(1, 3)
         self.down.setText('test')
+        self.split.setStretchFactor(0, 1)
+        self.split.setStretchFactor(1, 1)
         self._open('./temp/default.jpg')
         layout = QtGui.QVBoxLayout(self.split)
         self.setLayout(layout)

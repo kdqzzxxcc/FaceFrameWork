@@ -2,7 +2,7 @@ __author__ = 'KDQ'
 
 import sys
 from PyQt4 import QtGui, QtCore, Qt
-from Camera import CameraWidget
+from Camera import Combine
 from Display import Display
 import os
 from PyQt4.QtCore import Qt
@@ -30,15 +30,14 @@ class MainWindow(QtGui.QMainWindow):
         # left widget is camera widget, this widget deal with take photos through OpenCV Lib
         # ans transfer OpenCV Pic to PyQt4 QImage, then use QPainter to show PyQt Pic
 
-        self.left = CameraWidget(self.split)
-        self.split.setStretchFactor(0, 1)
+        self.left = Combine(self.split)
+        # self.split.setStretchFactor(0, 1)
 
         # right widget is display widget, this widget deal with process face detection algorithm,
         # and show result in it
 
         self.right = Display(self.split)
-        self.split.setStretchFactor(0, 1)
-
+        self.split.setStretchFactor(1, 1)
         self.setCentralWidget(self.split)
 
         # this is menu bar, in this instance, just use one to load pic

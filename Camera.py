@@ -46,10 +46,11 @@ class CameraWidget(QtGui.QWidget):
             self._start()
             self.pause = False
 
+    @property
     def take_photo(self):
         file_name = './temp/{}.png'.format(time.time())
-        cv2.imwrite(file_name, self.frame)
-        self.parent().right._open(file_name)
+        cv2.cv.SaveImage(file_name, self.frame)
+        return file_name
 
     # @property
     def _get_frame(self):
@@ -64,3 +65,47 @@ class CameraWidget(QtGui.QWidget):
         painter = QtGui.QPainter(self)
         painter.drawImage(QtCore.QPoint(0, 0), OpenCVtoPyQt(self.frame))
 
+
+class PushButton(QtGui.QWidget):
+
+    def __init__(self, parent=None):
+        super(PushButton, self).__init__(parent)
+        self.init()
+
+    def init(self):
+        layout = QtGui.QHBoxLayout(self)
+        self._take_photo = QtGui.QPushButton(self)
+        self._take_photo.setText('photo')
+        self._take_photo.clicked.connect(self._photo)
+        self._start = QtGui.QPushButton(self)
+        self._start.setText('start')
+        self._pause = QtGui.QPushButton(self)
+        self._pause.setText('pause')
+
+        layout.addWidget(self._take_photo)
+        layout.addWidget(self._start)
+        layout.addWidget(self._pause)
+        self.setLayout(layout)
+
+    def _photo(self):
+        file_name = self.parent().parent().parent().left.up.take_photo
+        self.parent().parent().parent().right._open(file_name)
+        # print self.parent().up
+
+
+class Combine(QtGui.QWidget):
+
+    def __init__(self, parent=None):
+        super(Combine, self).__init__(parent)
+        self.init()
+
+    def init(self):
+        # layout = QtGui.QVBoxLayout(self)
+        # layout.addWidget(CameraWidget(self))
+        # layout.addWidget(PushButton(self))
+        # self.setLayout(layout)
+        self.split = QtGui.QSplitter(QtCore.Qt.Vertical, self.parent())
+        self.up = CameraWidget(self.split)
+        self.down = PushButton(self.split)
+        self.split.setStretchFactor(0, 1)
+        # self.split.setStretchFactor(1, 1)
