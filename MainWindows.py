@@ -18,8 +18,8 @@ class MainWindow(QtGui.QMainWindow):
         # self.right._open('./temp/default.jpg')
 
     def init(self):
-        # self.showMaximized()
-        self.resize(1280, 960)
+        self.showMaximized()
+        # self.resize(1280, 960)
         self.setWindowTitle('FaceFrameWork')
 
         # set split layout
