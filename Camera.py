@@ -74,20 +74,34 @@ class PushButton(QtGui.QWidget):
 
     def init(self):
         layout = QtGui.QHBoxLayout(self)
-        self._take_photo = QtGui.QPushButton(self)
-        self._take_photo.setText('photo')
-        self._take_photo.clicked.connect(self._photo)
-        self._start = QtGui.QPushButton(self)
-        self._start.setText('start')
-        self._pause = QtGui.QPushButton(self)
-        self._pause.setText('pause')
+        self.take_photo = QtGui.QPushButton(self)
+        self.take_photo.setText('photo')
+        self.take_photo.clicked.connect(self._take_photo)
 
-        layout.addWidget(self._take_photo)
-        layout.addWidget(self._start)
-        layout.addWidget(self._pause)
+        self.start = QtGui.QPushButton(self)
+        self.start.setText('start')
+        self.start.clicked.connect(self._start)
+
+        self.pause = QtGui.QPushButton(self)
+        self.pause.setText('pause')
+        self.pause.clicked.connect(self._pause)
+
+        layout.addStretch(1)
+        layout.addWidget(self.take_photo)
+        layout.addWidget(self.start)
+        layout.addWidget(self.pause)
+        layout.addStretch(1)
         self.setLayout(layout)
 
-    def _photo(self):
+    def _start(self):
+        self.parent().parent().parent().left.up._start()
+        # pass
+
+    def _pause(self):
+        self.parent().parent().parent().left.up._pause()
+        # pass
+
+    def _take_photo(self):
         file_name = self.parent().parent().parent().left.up.take_photo
         self.parent().parent().parent().right._open(file_name)
         # print self.parent().up

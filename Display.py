@@ -10,12 +10,27 @@ class Display(QtGui.QWidget):
 
     def __init__(self, parent=None):
         super(Display, self).__init__(parent)
+        self.initVBox()
 
+    def initVBox(self):
+        self.up = QtGui.QLabel(self)
+        self.up.setAlignment(Qt.AlignCenter)
+
+        self.down = QtGui.QLabel(self)
+        self.down.setAlignment(Qt.AlignCenter)
+        self.down.setText('TEST')
+
+        layout = QtGui.QVBoxLayout(self)
+        layout.addWidget(self.up)
+        layout.addWidget(self.down)
+        layout.addStretch(1)
+
+        self._open('./temp/default.jpg')
+        self.setLayout(layout)
+
+    def initSpliter(self):
         # layout = QtGui.QVBoxLayout()
-        self.split = QtGui.QSplitter(Qt.Vertical, parent)
-        # self.uup = QtGui.QLabel(self.split)
-        # self.uup.setText(QtCore.QString.fromUtf8('照片'))
-        # self.split.setStretchFactor(9, 1)
+        self.split = QtGui.QSplitter(Qt.Vertical, self.parent())
         self.up = QtGui.QLabel(self.split)
         self.up.setAlignment(Qt.AlignCenter)
 
@@ -27,27 +42,12 @@ class Display(QtGui.QWidget):
         self._open('./temp/default.jpg')
         layout = QtGui.QVBoxLayout(self.split)
         self.setLayout(layout)
-        # self.split.setSizes([1,1])
-
-        # self.split.setStretchFactor(9, 1)
-        # self._layout = QtGui.QGridLayout(self)
-
-
-        # self.show_pic = QtGui.QLabel(self)
-        #
-        # self.result_pic = QtGui.QLabel(self)
-        #
-        # self._layout.addWidget(self.show_pic, 0, 0)
-        # self._layout
-        # self.show_pic.setPixmap()
-
-        # self._layout.addWidget(self.show_pic)
 
 
     def _open(self, file_path):
-        print file_path
+        # print file_path
         pix = QtGui.QPixmap(file_path)
-        print self.parent().size()
+        # print self.parent().size()
         pix = pix.scaledToHeight(960 / 3)
         pix = pix.scaledToWidth(1280 / 3)
         self.up.setPixmap(pix)
