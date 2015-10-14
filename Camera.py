@@ -19,10 +19,12 @@ class OpenCVtoPyQt(QtGui.QImage):
         super(OpenCVtoPyQt, self).__init__(self._imgData, w, h, QtGui.QImage.Format_RGB888)
 
 
-class CameraWidget(QtGui.QWidget):
+class CameraWidget(QtGui.QFrame):
 
     def __init__(self, parent=None, camera_index=0):
         super(CameraWidget, self).__init__(parent)
+        # self.setFrameStyle(QtGui.QFrame.Box)
+        self.setLineWidth(10)
         self.frame = None
         self.fps = 30
         self._camera = cv2.cv.CaptureFromCAM(camera_index)
@@ -71,6 +73,7 @@ class PushButton(QtGui.QWidget):
     def __init__(self, parent=None):
         super(PushButton, self).__init__(parent)
         self.init()
+        # self.setFrameRect()
 
     def init(self):
         layout = QtGui.QHBoxLayout(self)
@@ -120,6 +123,7 @@ class Combine(QtGui.QWidget):
         # self.setLayout(layout)
         self.split = QtGui.QSplitter(QtCore.Qt.Vertical, self.parent())
         self.up = CameraWidget(self.split)
+        # self.up.setStyleSheet('border:10px solid black;border-radius:5px')
         self.down = PushButton(self.split)
         self.split.setStretchFactor(0, 1)
         # self.split.setStretchFactor(1, 1)
