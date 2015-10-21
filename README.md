@@ -1,5 +1,5 @@
 # FaceFrameWork
-A FrameWork For Face Detection
+A FrameWork For Face Expression Recognition
 
 # py2exe
 
