@@ -123,6 +123,7 @@ class Combine(QtGui.QWidget):
         # self.setLayout(layout)
         self.split = QtGui.QSplitter(QtCore.Qt.Vertical, self.parent())
         self.up = CameraWidget(self.split)
+        self.up.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
         # self.up.setStyleSheet('border:10px solid black;border-radius:5px')
         self.down = PushButton(self.split)
         self.split.setStretchFactor(0, 1)
