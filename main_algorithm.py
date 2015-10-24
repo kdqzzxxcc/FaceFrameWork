@@ -15,11 +15,11 @@ from sklearn import preprocessing
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
-
+image_size = 64
 
 def init():
     global GABOR_FILTER, PCA_MODEL, SVM_MODEL
-    GABOR_FILTER = build_filter(48)
+    GABOR_FILTER = build_filter(image_size)
     PCA_MODEL = joblib.load('./model/pca.pkl')
     SVM_MODEL = joblib.load('./model/svm.pkl')
 
@@ -65,9 +65,9 @@ def get_classification(train_x, train_y):
 
 def get_pca():
     f = open('./data/all_names.txt','r')
-    filters = build_filter(48)
+    filters = build_filter(image_size)
     count = 0
-    results = np.zeros((213, 48 * 48 * 40))
+    results = np.zeros((213, image_size * image_size * 40))
     while True:
         line = f.readline()
         if len(line):

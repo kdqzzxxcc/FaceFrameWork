@@ -1,12 +1,14 @@
-#!/usr/bin/env python
 #coding=utf-8
 import os
 from PIL import Image, ImageDraw
 import cv2
-
 from cv2 import cv
 
 cascade = None
+image_size = 64
+import sys
+
+
 def detect_object(image):
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)
     cv.CvtColor(image, grayscale, cv.CV_BGR2GRAY)
@@ -52,7 +54,7 @@ def process(infile):
             file_name = infile + '.jpg'
             Image.open(infile).convert('RGB').crop((x1,y1,x2,y2)).save(file_name)
             img1 = cv.LoadImage(file_name)
-            re_img = cv.CreateImage((48, 48),8, 3)
+            re_img = cv.CreateImage((image_size, image_size),8, 3)
             cv.Resize(img1, re_img, cv.CV_INTER_LINEAR)
             cv.SaveImage(file_name, re_img)
             return infile + '.jpg'
