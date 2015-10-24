@@ -2,7 +2,7 @@
 #coding=utf-8
 import os
 from PIL import Image, ImageDraw
-# import cv
+import cv2
 
 from cv2 import cv
 
@@ -20,6 +20,21 @@ def detect_object(image):
         result.append((r[0][0], r[0][1], r[0][0]+r[0][2], r[0][1]+r[0][3]))
 
     return result
+
+def ontime_process(image):
+    face = detect_object(image)
+    if face:
+        for x1,y1,x2,y2 in face:
+            cv2.cv.Rectangle(image, (x1,y1), (x2,y2), (0, 255, 0))
+    return image
+
+
+def test_ontime_process(file_path):
+    img = cv2.cv.LoadImage(file_path)
+    img = ontime_process(img)
+    cv2.cv.ShowImage('aa',img)
+    cv2.cv.WaitKey(0)
+
 
 def process(infile):
     '''在原图上框出头像并且截取每个头像到单独文件夹'''
@@ -42,4 +57,5 @@ def process(infile):
             return infile + '.jpg'
 
 if __name__ == "__main__":
-    process("./xx.png")
+    test_ontime_process('./KA.HA2.30.tiff')
+    # process("./xx.png")

@@ -4,7 +4,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 import cv2
 import time
-
+from detect_face import ontime_process
 class OpenCVtoPyQt(QtGui.QImage):
 
     def __init__(self, opencvBgrImg):
@@ -57,6 +57,7 @@ class CameraWidget(QtGui.QFrame):
     # @property
     def _get_frame(self):
         self.frame = cv2.cv.QueryFrame(self._camera)
+        self.frame = ontime_process(image=self.frame)
         # print self.frame
         self.update()
         # return self.frame

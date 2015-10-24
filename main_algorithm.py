@@ -116,7 +116,47 @@ def get_model():
     get_classification(train_x.values, train_y.values)
     # cross_validation_score(train_x.values, train_y.values)
 
+
+def train_different_svm():
+    train_x = pd.read_csv('./data/train.csv', header = 0)
+    train_y = pd.read_csv('./data/label.csv', header = 0)
+    kfold = cross_validation.KFold(len(train_y), n_folds = 8, shuffle = True)
+
+    svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
+              kernel='rbf',
+              max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
+    model = OneVsRestClassifier(svc)
+    model.fit(train_x, train_y)
+    scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
+    print "rbf kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+
+    svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
+              kernel='linear',
+              max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
+    model = OneVsRestClassifier(svc)
+    model.fit(train_x, train_y)
+    scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
+    print "linear kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+
+    svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
+              kernel='poly',
+              max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
+    model = OneVsRestClassifier(svc)
+    model.fit(train_x, train_y)
+    scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
+    print "poly kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+
+    svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
+              kernel='sigmoid',
+              max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
+    model = OneVsRestClassifier(svc)
+    model.fit(train_x, train_y)
+    scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
+    print "sigmoid kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+
 if __name__ == '__main__':
+    # for i in range(1,5):
+    #     train_different_svm()
     get_model()
     # get_pca()
     # init()
