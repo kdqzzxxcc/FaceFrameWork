@@ -4,7 +4,7 @@ __author__ = 'KDQ'
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
-from Algorithm import init, run_algorithm
+from main_algorithm import init, run_algorithm
 display = {
     0:u"无表情",
     1:u"高兴",

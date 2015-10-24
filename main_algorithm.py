@@ -8,7 +8,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import SVC
 import pandas as pd
 from sklearn import cross_validation
-from DetecFace import process as detec_process
+from detect_face import process as detec_process
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
