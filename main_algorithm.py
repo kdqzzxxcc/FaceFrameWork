@@ -55,7 +55,7 @@ def process(img, filters):
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
-              kernel='rbf',
+              kernel='linear',
               max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
@@ -84,7 +84,7 @@ def get_pca():
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
     new_data = Pca.transform(results)
-    np.savetxt('train.csv', new_data, delimiter=',')
+    # np.savetxt('train.csv', new_data, delimiter=',')
 
 # 8-folds cross validation
 def cross_validation_score(train, label):
