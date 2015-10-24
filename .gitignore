@@ -61,4 +61,4 @@ target/
 
 # Project
 temp/*
-model/*
+model/
