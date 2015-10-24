@@ -86,16 +86,6 @@ def get_pca():
     new_data = Pca.transform(results)
     np.savetxt('train.csv', new_data, delimiter=',')
 
-
-def classification(test):
-    model = joblib.load('./model/svm.pkl')
-    return model.predict(test)
-
-
-def pca(test):
-    model = joblib.load('./model.pca.pkl')
-    return model.transform(test)
-
 # 8-folds cross validation
 def cross_validation_score(train, label):
     kfold = cross_validation.KFold(len(label), n_folds = 8, shuffle = True)
@@ -114,6 +104,7 @@ def run_algorithm(file_path):
     test = PCA_MODEL.transform(X=test)
     return SVM_MODEL.predict(test)
 
+
 def get_model():
     get_pca()
     train_x = pd.read_csv('./data/train.csv', header = 0)
@@ -121,7 +112,7 @@ def get_model():
     get_classification(train_x.values, train_y.values)
     # cross_validation_score(train_x.values, train_y.values)
 
-
+# 随机森林分类器
 def train_random_forest():
     train_x = pd.read_csv('./data/train.csv', header = 0)
     train_y = pd.read_csv('./data/label.csv', header = 0)
@@ -131,7 +122,7 @@ def train_random_forest():
     scores = cross_validation.cross_val_score(estimator=forest, cv=kfold, n_jobs=4, X=train_x.values, y=train_y.values)
     print scores , sum(scores) / len(scores)
 
-
+# k近邻分类器
 def train_knn():
     train_x = pd.read_csv('./data/train.csv', header = 0)
     train_y = pd.read_csv('./data/label.csv', header = 0)
@@ -182,15 +173,6 @@ def train_different_svm():
 if __name__ == '__main__':
     # for i in range(1,5):
     #     train_different_svm()
-    # get_model()
-    # get_pca()
-    train_knn()
-    train_random_forest()
-    # get_pca()
-    # init()
-    # print run_algorithm('./xx.png')
-    # train_x = pd.read_csv('./data/train.csv', header = 0)
-    # train_y = pd.read_csv('./data/label.csv', header = 0)
-    # get_classification(train_x.values, train_y.values)
-    # cross_validation_score(train_x.values, train_y.values)
-# NEU = 0; HAP = 1; SAD = 2; SUR = 3; ANG = 4; DIS = 5; FEA = 6;
+    # train_knn()
+    # train_random_forest()
+    get_model()
