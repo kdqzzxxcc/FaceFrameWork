@@ -30,7 +30,6 @@ class MainWindow(QtGui.QMainWindow):
         # ans transfer OpenCV Pic to PyQt4 QImage, then use QPainter to show PyQt Pic
 
         self.left = Combine(self.split)
-        # self.split.setStretchFactor(0, 1)
 
         # right widget is display widget, this widget deal with process face detection algorithm,
         # and show result in it
@@ -59,14 +58,10 @@ class MainWindow(QtGui.QMainWindow):
         if len(file_name) == 0:
             return False
         self.right._open(file_name)
-        ### TODO READ PIC IN DISPLAY WIDGET
         # Show pic in right widget and process face detection algorithm
 
 
 if __name__ == '__main__':
-    # import time
-    # print './temp/{}.png'.format(time.time())
-    # print sys.path
     app = QtGui.QApplication(sys.argv)
     main_window = MainWindow()
     main_window.show()

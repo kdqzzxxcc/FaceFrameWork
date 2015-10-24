@@ -116,7 +116,7 @@ def get_model():
     get_classification(train_x.values, train_y.values)
     # cross_validation_score(train_x.values, train_y.values)
 
-
+# 测试不同kernel的svm的交叉验证率，并没有本质上的差距
 def train_different_svm():
     train_x = pd.read_csv('./data/train.csv', header = 0)
     train_y = pd.read_csv('./data/label.csv', header = 0)

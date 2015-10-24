@@ -35,7 +35,7 @@ class Display(QtGui.QWidget):
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(self.uup)
         layout.addWidget(self.up)
-        layout.addStretch(2)
+        layout.addStretch(1)
         layout.addWidget(self.down)
         # layout.addStretch(1)
 
