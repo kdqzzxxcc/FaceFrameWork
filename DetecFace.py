@@ -11,7 +11,7 @@ def detect_object(image):
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)
     cv.CvtColor(image, grayscale, cv.CV_BGR2GRAY)
 
-    cascade = cv.Load("E:\\opencv\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt_tree.xml")
+    cascade = cv.Load("./model/haarcascade_frontalface_alt_tree.xml")
     rect = cv.HaarDetectObjects(grayscale, cascade, cv.CreateMemStorage(), 1.1, 3,
         cv.CV_HAAR_DO_CANNY_PRUNING, (40,40))
 
@@ -39,6 +39,7 @@ def process(infile):
             re_img = cv.CreateImage((48, 48),8, 3)
             cv.Resize(img1, re_img, cv.CV_INTER_LINEAR)
             cv.SaveImage(file_name, re_img)
+            return infile + '.jpg'
 
 if __name__ == "__main__":
-    process("./KA.AN1.39.tiff")
+    process("./xx.png")

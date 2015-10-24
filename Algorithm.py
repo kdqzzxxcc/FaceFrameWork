@@ -8,6 +8,17 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import SVC
 import pandas as pd
 from sklearn import cross_validation
+from DetecFace import process as detec_process
+PCA_MODEL = None
+SVM_MODEL = None
+GABOR_FILTER = None
+
+
+def init():
+    global GABOR_FILTER, PCA_MODEL, SVM_MODEL
+    GABOR_FILTER = build_filter(48)
+    PCA_MODEL = joblib.load('./model/pca.pkl')
+    SVM_MODEL = joblib.load('./model/svm.pkl')
 
 
 # 5个尺度 8 个方向的 gabor filter
@@ -37,7 +48,7 @@ def process(img, filters):
         result[0,bound:bound+spn] = fimg
         bound = bound + spn
 
-    return result
+    return result / 255
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -64,11 +75,11 @@ def get_pca():
         else:
             break
     # results = 213 * (48 * 48 * 40)
-    Pca = PCA(n_components=100)
+    Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
     new_data = Pca.transform(results)
-    np.savetxt('yy.csv', new_data, delimiter=',')
+    # np.savetxt('train.csv', new_data, delimiter=',')
 
 
 def classification(test):
@@ -89,8 +100,20 @@ def cross_validation_score(train, label):
     print sum(scores) / len(scores)
 
 
+def run_algorithm(file_path):
+    file_path = detec_process(file_path)
+    g = cv2.imread(file_path, 0)
+    test = process(g, GABOR_FILTER)
+    test = PCA_MODEL.transform(X=test)
+    return SVM_MODEL.predict(test)
+
+
 if __name__ == '__main__':
-    train_x = pd.read_csv('./data/train.csv', header = 0)
-    train_y = pd.read_csv('./data/label.csv', header = 0)
-    get_classification(train_x.values, train_y.values)
-    cross_validation_score(train_x.values, train_y.values)
+    # get_pca()
+    init()
+    print run_algorithm('./xx.png')
+    # train_x = pd.read_csv('./data/train.csv', header = 0)
+    # train_y = pd.read_csv('./data/label.csv', header = 0)
+    # get_classification(train_x.values, train_y.values)
+    # cross_validation_score(train_x.values, train_y.values)
+# NEU = 0; HAP = 1; SAD = 2; SUR = 3; ANG = 4; DIS = 5; FEA = 6;

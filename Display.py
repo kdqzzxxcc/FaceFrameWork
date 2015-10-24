@@ -4,13 +4,22 @@ __author__ = 'KDQ'
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
-
-
+from Algorithm import init, run_algorithm
+display = {
+    0:u"无表情",
+    1:u"高兴",
+    2:u"伤心",
+    3:u"惊讶",
+    4:u"生气",
+    5:u"沮丧",
+    6:u"害怕"
+}
 class Display(QtGui.QWidget):
 
     def __init__(self, parent=None):
         super(Display, self).__init__(parent)
         self.initVBox()
+        init()
 
     def initVBox(self):
         self.uup = QtGui.QLabel(QtCore.QString.fromUtf8('识别图像'))
@@ -61,6 +70,9 @@ class Display(QtGui.QWidget):
         pix = pix.scaledToHeight(960 / 3)
         pix = pix.scaledToWidth(1280 / 3)
         self.up.setPixmap(pix)
+        if file_path != './temp/default.jpg':
+            result = run_algorithm(file_path)
+            self.down.setText(QtCore.QString.fromUtf8(display[int(result[0])]))
         ### TODO PROCESS FACE DETECTION ALGORITHM
 
 
