@@ -72,7 +72,10 @@ class Display(QtGui.QWidget):
         self.up.setPixmap(pix)
         if file_path != './temp/default.jpg':
             result = run_algorithm(file_path)
-            self.down.setText(QtCore.QString.fromUtf8(display[int(result[0])]))
+            if result is None:
+                self.down.setText(QtCore.QString.fromUtf8("无法检测到人脸，请检查图片分辨率"))
+            else:
+                self.down.setText(QtCore.QString.fromUtf8(display[int(result[0])]))
         ### TODO PROCESS FACE DETECTION ALGORITHM
 
 

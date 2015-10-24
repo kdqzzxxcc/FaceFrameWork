@@ -102,6 +102,8 @@ def cross_validation_score(train, label):
 
 def run_algorithm(file_path):
     file_path = detec_process(file_path)
+    if file_path == None:
+        return None
     g = cv2.imread(file_path, 0)
     test = process(g, GABOR_FILTER)
     test = PCA_MODEL.transform(X=test)
