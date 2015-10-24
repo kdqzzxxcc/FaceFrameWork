@@ -9,6 +9,8 @@ from sklearn.svm import SVC
 import pandas as pd
 from sklearn import cross_validation
 from detect_face import process as detec_process
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
@@ -116,6 +118,26 @@ def get_model():
     get_classification(train_x.values, train_y.values)
     # cross_validation_score(train_x.values, train_y.values)
 
+
+def train_random_forest():
+    train_x = pd.read_csv('./data/train.csv', header = 0)
+    train_y = pd.read_csv('./data/label.csv', header = 0)
+    forest = RandomForestClassifier(n_estimators=100)
+    forest.fit(train_x.values, train_y.values)
+    kfold = cross_validation.KFold(len(train_y.values), n_folds = 8, shuffle = True)
+    scores = cross_validation.cross_val_score(estimator=forest, cv=kfold, n_jobs=4, X=train_x.values, y=train_y.values)
+    print scores , sum(scores) / len(scores)
+
+
+def train_knn():
+    train_x = pd.read_csv('./data/train.csv', header = 0)
+    train_y = pd.read_csv('./data/label.csv', header = 0)
+    knn = KNeighborsClassifier(algorithm='auto', n_neighbors=5, weights='distance')
+    knn.fit(train_x.values, train_y.values)
+    kfold = cross_validation.KFold(len(train_y.values), n_folds = 8, shuffle = True)
+    scores = cross_validation.cross_val_score(estimator=knn, cv=kfold, n_jobs=4, X=train_x.values, y=train_y.values)
+    print scores , sum(scores) / len(scores)
+
 # 测试不同kernel的svm的交叉验证率，并没有本质上的差距
 def train_different_svm():
     train_x = pd.read_csv('./data/train.csv', header = 0)
@@ -158,6 +180,8 @@ if __name__ == '__main__':
     # for i in range(1,5):
     #     train_different_svm()
     get_model()
+    # train_knn()
+    # train_random_forest()
     # get_pca()
     # init()
     # print run_algorithm('./xx.png')
