@@ -91,7 +91,7 @@ def pca(test):
     model = joblib.load('./model.pca.pkl')
     return model.transform(test)
 
-
+# 8-folds cross validation
 def cross_validation_score(train, label):
     kfold = cross_validation.KFold(len(label), n_folds = 8, shuffle = True)
     model = joblib.load('./model/svm.pkl')
@@ -107,11 +107,18 @@ def run_algorithm(file_path):
     test = PCA_MODEL.transform(X=test)
     return SVM_MODEL.predict(test)
 
+def get_model():
+    get_pca()
+    train_x = pd.read_csv('./data/train.csv', header = 0)
+    train_y = pd.read_csv('./data/label.csv', header = 0)
+    get_classification(train_x.values, train_y.values)
+    # cross_validation_score(train_x.values, train_y.values)
 
 if __name__ == '__main__':
+    get_model()
     # get_pca()
-    init()
-    print run_algorithm('./xx.png')
+    # init()
+    # print run_algorithm('./xx.png')
     # train_x = pd.read_csv('./data/train.csv', header = 0)
     # train_y = pd.read_csv('./data/label.csv', header = 0)
     # get_classification(train_x.values, train_y.values)
