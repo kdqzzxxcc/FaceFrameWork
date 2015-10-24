@@ -51,11 +51,11 @@ def process(img, filters):
         result[0,bound:bound+spn] = fimg
         bound = bound + spn
 
-    return preprocessing.normalize(result)
+    return result / 255
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
-              kernel='linear',
+              kernel='rbf',
               max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
