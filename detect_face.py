@@ -9,7 +9,8 @@ from cv2 import cv
 def detect_object(image):
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)
     cv.CvtColor(image, grayscale, cv.CV_BGR2GRAY)
-
+    # cv.ShowImage('aa',image)
+    # cv.WaitKey(0)
     cascade = cv.Load("./model/haarcascade_frontalface_alt_tree.xml")
     rect = cv.HaarDetectObjects(grayscale, cascade, cv.CreateMemStorage(), 1.1, 3,
         cv.CV_HAAR_DO_CANNY_PRUNING, (40,40))
@@ -22,6 +23,8 @@ def detect_object(image):
 
 # 将坐标中的矩形画出
 def ontime_process(image):
+    if image is None:
+        return image
     face = detect_object(image)
     if face:
         for x1,y1,x2,y2 in face:
@@ -32,7 +35,7 @@ def ontime_process(image):
 def test_ontime_process(file_path):
     img = cv2.cv.LoadImage(file_path)
     img = ontime_process(img)
-    cv2.cv.ShowImage('aa',img)
+    cv2.cv.ShowImage('aa', img)
     cv2.cv.WaitKey(0)
 
 # 将矩形区域截取出来然后缩放到48*48
