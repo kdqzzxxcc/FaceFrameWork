@@ -26,6 +26,7 @@ class CameraWidget(QtGui.QFrame):
         # self.setFrameStyle(QtGui.QFrame.Box)
         self.setLineWidth(10)
         self.frame = None
+        self.frame1 = None
         self.fps = 30
         self._camera = cv2.cv.CaptureFromCAM(camera_index)
         self.timer = QtCore.QTimer(self)
@@ -57,16 +58,16 @@ class CameraWidget(QtGui.QFrame):
     # @property
     def _get_frame(self):
         self.frame = cv2.cv.QueryFrame(self._camera)
-        self.frame = ontime_process(image=self.frame)
+        self.frame1 = ontime_process(image=self.frame)
         # print self.frame
         self.update()
         # return self.frame
 
     def paintEvent(self, QPaintEvent):
-        if self.frame is None:
+        if self.frame1 is None:
             return
         painter = QtGui.QPainter(self)
-        painter.drawImage(QtCore.QPoint(0, 0), OpenCVtoPyQt(self.frame))
+        painter.drawImage(QtCore.QPoint(0, 0), OpenCVtoPyQt(self.frame1))
 
 
 class PushButton(QtGui.QWidget):
