@@ -6,12 +6,15 @@ import cv2
 
 from cv2 import cv
 
+cascade = None
 def detect_object(image):
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)
     cv.CvtColor(image, grayscale, cv.CV_BGR2GRAY)
     # cv.ShowImage('aa',image)
     # cv.WaitKey(0)
-    cascade = cv.Load("./model/haarcascade_frontalface_alt_tree.xml")
+    global cascade
+    if cascade is None:
+        cascade = cv.Load('./model/haarcascade_frontalface_alt_tree.xml')
     rect = cv.HaarDetectObjects(grayscale, cascade, cv.CreateMemStorage(), 1.1, 3,
         cv.CV_HAAR_DO_CANNY_PRUNING, (40,40))
     # 获取坐标并记录
