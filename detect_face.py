@@ -5,8 +5,7 @@ import cv2
 from cv2 import cv
 
 cascade = None
-image_size = 64
-import sys
+image_size = 48
 
 
 def detect_object(image):
@@ -34,6 +33,7 @@ def ontime_process(image):
     if face:
         for x1,y1,x2,y2 in face:
             cv2.cv.Rectangle(image, (x1,y1), (x2,y2), (0, 255, 0))
+
     return image
 
 # 测试代码

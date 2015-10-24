@@ -15,7 +15,7 @@ from sklearn import preprocessing
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
-image_size = 64
+image_size = 48
 
 def init():
     global GABOR_FILTER, PCA_MODEL, SVM_MODEL
@@ -51,7 +51,7 @@ def process(img, filters):
         result[0,bound:bound+spn] = fimg
         bound = bound + spn
 
-    return result
+    return preprocessing.normalize(result)
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -79,11 +79,11 @@ def get_pca():
             break
     # results = 213 * (48 * 48 * 40)
     # results = preprocessing.normalize(results)
-    results = preprocessing.scale(results)
+    # results = preprocessing.scale(results)
     Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
-    new_data = Pca.transform(results)
+    # new_data = Pca.transform(results)
     # np.savetxt('train.csv', new_data, delimiter=',')
 
 # 8-folds cross validation
@@ -176,3 +176,6 @@ if __name__ == '__main__':
     # train_knn()
     # train_random_forest()
     get_model()
+    # a = np.array([[1,2,3]],dtype=np.float)
+    # a = preprocessing.normalize(a)
+    # print a

@@ -63,3 +63,4 @@ target/
 temp/*
 model/
 jaffe/
+data/*.csv
