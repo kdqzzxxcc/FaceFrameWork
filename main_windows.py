@@ -13,7 +13,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__(parent)
         if os.path.exists('./temp') == False:
             os.mkdir('./temp')
-        self._action()
+        # self._action()
         self.init()
         # self.right._open('./temp/default.jpg')
 
@@ -39,19 +39,35 @@ class MainWindow(QtGui.QMainWindow):
         self.setCentralWidget(self.split)
 
         # this is menu bar, in this instance, just use one to load pic
-
+        self._action()
         menu = self.menuBar()
         file = menu.addMenu('File')
+        action = menu.addMenu('Action')
         file.addAction(self._open_file)
         file.addAction(self._close_file)
+        action.addAction(self._photo)
+        action.addAction(self._start)
+        action.addAction(self._pause)
 
     def _action(self):
-        self._open_file = QtGui.QAction('open', self)
+        self._open_file = QtGui.QAction('Open', self)
         self._open_file.setShortcut('Ctrl+O')
         self._open_file.triggered.connect(self._open)
 
-        self._close_file = QtGui.QAction('close', self)
+        self._close_file = QtGui.QAction('Close', self)
         self._close_file.triggered.connect(self.close)
+
+        self._photo = QtGui.QAction('Photo', self)
+        self._photo.setShortcut('Ctrl+Q')
+        self._photo.triggered.connect(lambda :self.left.down._take_photo())
+
+        self._start = QtGui.QAction('Start', self)
+        self._start.setShortcut('Ctrl+S')
+        self._start.triggered.connect(lambda :self.left.down._start())
+
+        self._pause = QtGui.QAction('Pause', self)
+        self._pause.setShortcut('Ctrl+P')
+        self._pause.triggered.connect(lambda :self.left.down._pause())
 
     def _open(self):
         file_name = unicode(QtGui.QFileDialog().getOpenFileName(self,'Open', self.tr(''), self.tr('*')))
