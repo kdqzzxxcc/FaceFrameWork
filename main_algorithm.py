@@ -11,6 +11,7 @@ from sklearn import cross_validation
 from detect_face import process as detec_process
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn import preprocessing
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
@@ -50,7 +51,7 @@ def process(img, filters):
         result[0,bound:bound+spn] = fimg
         bound = bound + spn
 
-    return result / 255
+    return result
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -77,11 +78,13 @@ def get_pca():
         else:
             break
     # results = 213 * (48 * 48 * 40)
+    # results = preprocessing.normalize(results)
+    results = preprocessing.scale(results)
     Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
     new_data = Pca.transform(results)
-    # np.savetxt('train.csv', new_data, delimiter=',')
+    np.savetxt('train.csv', new_data, delimiter=',')
 
 
 def classification(test):
@@ -179,9 +182,10 @@ def train_different_svm():
 if __name__ == '__main__':
     # for i in range(1,5):
     #     train_different_svm()
-    get_model()
-    # train_knn()
-    # train_random_forest()
+    # get_model()
+    # get_pca()
+    train_knn()
+    train_random_forest()
     # get_pca()
     # init()
     # print run_algorithm('./xx.png')
