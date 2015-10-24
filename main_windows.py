@@ -2,8 +2,8 @@ __author__ = 'KDQ'
 
 import sys
 from PyQt4 import QtGui, QtCore, Qt
-from camera import Combine
-from display import Display
+from main_camera import Combine
+from display_result import Display
 import os
 from PyQt4.QtCore import Qt
 
