@@ -27,7 +27,7 @@ def init():
 # 5个尺度 8 个方向的 gabor filter
 def build_filter(img_size):
     filters = []
-    for lamd in np.arange(2.5, 12.5, 2):
+    for lamd in np.arange(1, 16, 3):
         # print lamd
         for thea in np.arange(0, np.pi, np.pi / 8):
             kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=10, psi=0.5, ktype=cv2.CV_32F)
@@ -56,7 +56,7 @@ def process(img, filters):
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
-              kernel='linear',
+              kernel='rbf',
               max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
@@ -84,8 +84,8 @@ def get_pca():
     Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
-    # new_data = Pca.transform(results)
-    # np.savetxt('train.csv', new_data, delimiter=',')
+    new_data = Pca.transform(results)
+    np.savetxt('train.csv', new_data, delimiter=',')
 
 # 8-folds cross validation
 def cross_validation_score(train, label):
@@ -123,6 +123,10 @@ def train_random_forest():
     scores = cross_validation.cross_val_score(estimator=forest, cv=kfold, n_jobs=4, X=train_x.values, y=train_y.values)
     print scores , sum(scores) / len(scores)
 
+linear_score = []
+rbf_score = []
+sigmoid_score = []
+poly_score = []
 # k近邻分类器
 def train_knn():
     train_x = pd.read_csv('./data/train.csv', header = 0)
@@ -146,6 +150,7 @@ def train_different_svm():
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
     print "rbf kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    rbf_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
               kernel='linear',
@@ -154,6 +159,7 @@ def train_different_svm():
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
     print "linear kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    linear_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
               kernel='poly',
@@ -162,6 +168,7 @@ def train_different_svm():
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
     print "poly kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    poly_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
               kernel='sigmoid',
@@ -170,15 +177,20 @@ def train_different_svm():
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
     print "sigmoid kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    sigmoid_score.append(sum(scores)/ len(scores))
 
 if __name__ == '__main__':
     # for i in np.arange(2.5, 12.5, 2):
     #     print i
-    # for i in range(1,5):
-    #     train_different_svm()
+    for i in range(1,10):
+        train_different_svm()
+    print 'rbf', sum(rbf_score) / len(rbf_score)
+    print 'linear', sum(linear_score) / len(linear_score)
+    print 'poly', sum(poly_score) / len(poly_score)
+    print 'sigmoid', sum(sigmoid_score) / len(sigmoid_score)
     # train_knn()
     # train_random_forest()
-    get_model()
+    # get_model()
     # a = np.array([[1,2,3]],dtype=np.float)
     # a = preprocessing.normalize(a)
     # print a
