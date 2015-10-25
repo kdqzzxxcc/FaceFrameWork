@@ -12,6 +12,7 @@ from detect_face import process as detec_process
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
+from matplotlib import pyplot as plt
 PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
@@ -27,12 +28,22 @@ def init():
 # 5个尺度 8 个方向的 gabor filter
 def build_filter(img_size):
     filters = []
+    # plt.figure()
+    # h = 1
     for lamd in np.arange(1, 16, 3):
-        # print lamd
+        # print lamd5
         for thea in np.arange(0, np.pi, np.pi / 8):
+            # y = 0
+            # print
             kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=10, psi=0.5, ktype=cv2.CV_32F)
             kern /= 1.5 * kern.sum()
             filters.append(kern)
+            # plt.subplot()
+            # cv2.imshow('lamda={}, thea={}'.format(lamd, thea),kern)
+            # cv2.imwrite('./gabor_filter/lamda={},theta={}.png'.format(lamd, thea), kern)
+            # cv2.waitKey(0)
+            # y += 1
+        # h += 2
     return filters
 
 
@@ -56,7 +67,7 @@ def process(img, filters):
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
-              kernel='rbf',
+              kernel='linear',
               max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
@@ -107,11 +118,11 @@ def run_algorithm(file_path):
 
 
 def get_model():
-    get_pca()
+    # get_pca()
     train_x = pd.read_csv('./data/train.csv', header = 0)
     train_y = pd.read_csv('./data/label.csv', header = 0)
     get_classification(train_x.values, train_y.values)
-    # cross_validation_score(train_x.values, train_y.values)
+    cross_validation_score(train_x.values, train_y.values)
 
 # 随机森林分类器
 def train_random_forest():
@@ -189,6 +200,7 @@ if __name__ == '__main__':
     print 'poly', sum(poly_score) / len(poly_score)
     print 'sigmoid', sum(sigmoid_score) / len(sigmoid_score)
     # train_knn()
+    # build_filter(48)
     # train_random_forest()
     # get_model()
     # a = np.array([[1,2,3]],dtype=np.float)
