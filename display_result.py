@@ -5,6 +5,8 @@ __author__ = 'KDQ'
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 from main_algorithm import init, run_algorithm
+right_image_height = 400
+right_image_width = 500
 display = {
     0:u"无表情",
     1:u"高兴",
@@ -28,7 +30,8 @@ class Display(QtGui.QWidget):
         self.up = QtGui.QLabel(self)
         self.up.setAlignment(Qt.AlignCenter)
         self.up.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
-
+        # self.up.setFixedHeight(400)
+        self.up.setFixedSize(right_image_width, right_image_height)
         self.down = QtGui.QLabel(self)
         self.down.setAlignment(Qt.AlignCenter)
         self.down.setText(QtCore.QString.fromUtf8('请输入图片'))
@@ -42,15 +45,16 @@ class Display(QtGui.QWidget):
         # layout.addStretch(1)
         layout.addWidget(self.down)
         layout.addStretch(1)
-
-        self._open('./temp/default.jpg')
         self.setLayout(layout)
+        self._open('./temp/default.jpg')
+
 
     def initSpliter(self):
         # layout = QtGui.QVBoxLayout()
         self.split = QtGui.QSplitter(Qt.Vertical, self.parent())
         self.up = QtGui.QLabel(self.split)
         self.up.setAlignment(Qt.AlignCenter)
+        self.split.setStretchFactor(0, 1)
         # self.up.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
         # self.up.setStyleSheet('border:10px solid black;border-radius:5px')
         self.down = QtGui.QLabel(self.split)
@@ -71,8 +75,9 @@ class Display(QtGui.QWidget):
         # print file_path
         pix = QtGui.QPixmap(file_path)
         # print self.parent().size()
-        pix = pix.scaledToHeight(960 / 4)
-        pix = pix.scaledToWidth(1280 / 3)
+        pix = pix.scaled(right_image_width, right_image_height)
+        # pix = pix.scaledToHeight(500 / 2)
+        # pix = pix.scaledToWidth(1200 / 3)
         self.up.setPixmap(pix)
         if file_path != './temp/default.jpg':
             result = run_algorithm(file_path)
