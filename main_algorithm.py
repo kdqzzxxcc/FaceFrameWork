@@ -27,7 +27,8 @@ def init():
 # 5个尺度 8 个方向的 gabor filter
 def build_filter(img_size):
     filters = []
-    for lamd in np.arange(1, 16, 3):
+    for lamd in np.arange(2.5, 12.5, 2):
+        # print lamd
         for thea in np.arange(0, np.pi, np.pi / 8):
             kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=10, psi=0.5, ktype=cv2.CV_32F)
             kern /= 1.5 * kern.sum()
@@ -55,7 +56,7 @@ def process(img, filters):
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
-              kernel='rbf',
+              kernel='linear',
               max_iter=-1, probability=False, random_state=None, shrinking=True, tol=0.001, verbose=False)
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
@@ -171,6 +172,8 @@ def train_different_svm():
     print "sigmoid kernel",sum(scores) / len(scores), model.score(train_x, train_y)
 
 if __name__ == '__main__':
+    # for i in np.arange(2.5, 12.5, 2):
+    #     print i
     # for i in range(1,5):
     #     train_different_svm()
     # train_knn()
