@@ -59,8 +59,9 @@ class CameraWidget(QtGui.QFrame):
     def _get_frame(self):
         self.frame = cv2.cv.QueryFrame(self._camera)
         # print type(self.frame)
-        self.frame1 = cv2.cv.CloneImage(self.frame)
-        self.frame1 = ontime_process(image=self.frame1)
+        if self.frame:
+            self.frame1 = cv2.cv.CloneImage(self.frame)
+            self.frame1 = ontime_process(image=self.frame1)
         # print self.frame
         self.update()
         # return self.frame

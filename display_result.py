@@ -24,20 +24,24 @@ class Display(QtGui.QWidget):
     def initVBox(self):
         self.uup = QtGui.QLabel(QtCore.QString.fromUtf8('识别图像'))
         self.uup.setAlignment(Qt.AlignCenter)
+        self.uup.setFixedHeight(25)
         self.up = QtGui.QLabel(self)
         self.up.setAlignment(Qt.AlignCenter)
+        self.up.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
 
         self.down = QtGui.QLabel(self)
         self.down.setAlignment(Qt.AlignCenter)
-        self.down.setText('TEST')
+        self.down.setText(QtCore.QString.fromUtf8('请输入图片'))
         self.down.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
+        self.down.setFixedHeight(50)
 
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(self.uup)
-        layout.addWidget(self.up)
-        layout.addStretch(1)
-        layout.addWidget(self.down)
         # layout.addStretch(1)
+        layout.addWidget(self.up)
+        # layout.addStretch(1)
+        layout.addWidget(self.down)
+        layout.addStretch(1)
 
         self._open('./temp/default.jpg')
         self.setLayout(layout)
@@ -51,7 +55,7 @@ class Display(QtGui.QWidget):
         # self.up.setStyleSheet('border:10px solid black;border-radius:5px')
         self.down = QtGui.QLabel(self.split)
         self.down.setAlignment(Qt.AlignCenter)
-        self.down.setText('test')
+        self.down.setText(QtCore.QString.fromUtf8('请输入图片'))
         self.down.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
         self.down.setLineWidth(10)
 
@@ -67,7 +71,7 @@ class Display(QtGui.QWidget):
         # print file_path
         pix = QtGui.QPixmap(file_path)
         # print self.parent().size()
-        pix = pix.scaledToHeight(960 / 3)
+        pix = pix.scaledToHeight(960 / 4)
         pix = pix.scaledToWidth(1280 / 3)
         self.up.setPixmap(pix)
         if file_path != './temp/default.jpg':
@@ -75,7 +79,7 @@ class Display(QtGui.QWidget):
             if result is None:
                 self.down.setText(QtCore.QString.fromUtf8("无法检测到人脸，请检查图片分辨率"))
             else:
-                self.down.setText(QtCore.QString.fromUtf8(display[int(result[0])]))
+                self.down.setText(QtCore.QString.fromUtf8(u"检测结果："+display[int(result[0])]))
         ### TODO PROCESS FACE DETECTION ALGORITHM
 
 
