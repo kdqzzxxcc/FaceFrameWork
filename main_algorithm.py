@@ -95,8 +95,8 @@ def get_pca():
     Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
-    new_data = Pca.transform(results)
-    np.savetxt('train.csv', new_data, delimiter=',')
+    # new_data = Pca.transform(results)
+    # np.savetxt('train.csv', new_data, delimiter=',')
 
 # 8-folds cross validation
 def cross_validation_score(train, label):
@@ -118,7 +118,7 @@ def run_algorithm(file_path):
 
 
 def get_model():
-    # get_pca()
+    get_pca()
     train_x = pd.read_csv('./data/train.csv', header = 0)
     train_y = pd.read_csv('./data/label.csv', header = 0)
     get_classification(train_x.values, train_y.values)
@@ -193,16 +193,16 @@ def train_different_svm():
 if __name__ == '__main__':
     # for i in np.arange(2.5, 12.5, 2):
     #     print i
-    for i in range(1,10):
-        train_different_svm()
-    print 'rbf', sum(rbf_score) / len(rbf_score)
-    print 'linear', sum(linear_score) / len(linear_score)
-    print 'poly', sum(poly_score) / len(poly_score)
-    print 'sigmoid', sum(sigmoid_score) / len(sigmoid_score)
+    # for i in range(1,10):
+    #     train_different_svm()
+    # print 'rbf', sum(rbf_score) / len(rbf_score)
+    # print 'linear', sum(linear_score) / len(linear_score)
+    # print 'poly', sum(poly_score) / len(poly_score)
+    # print 'sigmoid', sum(sigmoid_score) / len(sigmoid_score)
     # train_knn()
     # build_filter(48)
     # train_random_forest()
-    # get_model()
+    get_model()
     # a = np.array([[1,2,3]],dtype=np.float)
     # a = preprocessing.normalize(a)
     # print a
