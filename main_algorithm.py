@@ -17,6 +17,7 @@ PCA_MODEL = None
 SVM_MODEL = None
 GABOR_FILTER = None
 image_size = 48
+ksize = 49
 
 def init():
     global GABOR_FILTER, PCA_MODEL, SVM_MODEL
@@ -28,42 +29,27 @@ def init():
 # 5个尺度 8 个方向的 gabor filter
 def build_filter(img_size):
     filters = []
-    # plt.figure()
-    # h = 1
-    for lamd in np.arange(1, 16, 3):
-        # print lamd5
+    for lamd in np.arange(1, 16, 3 ):
         for thea in np.arange(0, np.pi, np.pi / 8):
-            # y = 0
-            # print
             kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=10, psi=0.5, ktype=cv2.CV_32F)
             kern /= 1.5 * kern.sum()
             filters.append(kern)
-            # plt.subplot()
-            # cv2.imshow('lamda={}, thea={}'.format(lamd, thea),kern)
-            # cv2.imwrite('./gabor_filter/lamda={},theta={}.png'.format(lamd, thea), kern)
-            # cv2.waitKey(0)
-            # y += 1
-        # h += 2
     return filters
 
 
 # 使用5 * 8 的gabor filter对图像进行处理
 def process(img, filters):
-    # results = np.zeros((1, 256* 256 * 40))
-    # results[0,1] = 1
     result = np.zeros((1, img.shape[0] * img.shape[0] * 40))
     bound = 0
     spn = img.shape[0] * img.shape[0]
 
     for kern in filters:
         fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)
-        # cv2.imshow('test', fimg)
-        # cv2.waitKey(1000)
         fimg = fimg.reshape(1,fimg.shape[0]*fimg.shape[1])
         result[0,bound:bound+spn] = fimg
         bound = bound + spn
-
-    return result / 255
+    return preprocessing.normalize(result)
+    # return result / 255
 
 def get_classification(train_x, train_y):
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -77,7 +63,7 @@ def get_classification(train_x, train_y):
 
 def get_pca():
     f = open('./data/all_names.txt','r')
-    filters = build_filter(image_size)
+    filters = build_filter(ksize)
     count = 0
     results = np.zeros((213, image_size * image_size * 40))
     while True:
@@ -95,8 +81,8 @@ def get_pca():
     Pca = PCA(n_components=213)
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
-    # new_data = Pca.transform(results)
-    # np.savetxt('train.csv', new_data, delimiter=',')
+    new_data = Pca.transform(results)
+    np.savetxt('./data/train.csv', new_data, delimiter=',')
 
 # 8-folds cross validation
 def cross_validation_score(train, label):
@@ -190,9 +176,39 @@ def train_different_svm():
     print "sigmoid kernel",sum(scores) / len(scores), model.score(train_x, train_y)
     sigmoid_score.append(sum(scores)/ len(scores))
 
+
+def train_different_gabor_filter(img_size, file_path):
+    filters = []
+    count = 1
+    # plt.figure(1)
+    for lamd in np.arange(np.pi, 2 * np.pi, np.pi / 5):
+        for thea in np.arange(0, np.pi, np.pi / 8):
+            kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=5, psi=0, ktype=cv2.CV_32F)
+            kern /= 1.5 * kern.sum()
+            filters.append(kern)
+            print kern
+            # plt.subplot(5, 8, count)
+            # plt.plot(kern)
+            # ax = fig.add_subplot()
+            cv2.imwrite('./gabor_filter/gabor_{}.png'.format(count), kern)
+            count += 1
+    # plt.show()
+    # plt.figure(2)
+    img = cv2.imread(file_path, 0)
+    count = 1
+    for kern in filters:
+        fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)
+        # plt.subplot(5, 8, count)
+        # plt.plot(fimg)
+        cv2.imwrite('./gabor_filter/face_{}.png'.format(count), fimg)
+        count += 1
+    # plt.show()
+
+
 if __name__ == '__main__':
     # for i in np.arange(2.5, 12.5, 2):
     #     print i
+    get_model()
     # for i in range(1,10):
     #     train_different_svm()
     # print 'rbf', sum(rbf_score) / len(rbf_score)
@@ -202,7 +218,7 @@ if __name__ == '__main__':
     # train_knn()
     # build_filter(48)
     # train_random_forest()
-    get_model()
+    # train_different_gabor_filter(49, './JAFFE1/KA.AN1.39.tiff.jpg')
     # a = np.array([[1,2,3]],dtype=np.float)
     # a = preprocessing.normalize(a)
     # print a
