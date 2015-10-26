@@ -82,7 +82,11 @@ def get_pca():
     Pca.fit(X=results)
     joblib.dump(Pca, './model/pca.pkl')
     new_data = Pca.transform(results)
-    np.savetxt('./data/train.csv', new_data, delimiter=',')
+    header = 'feature'
+    header_string = 'feature'
+    for i in range(0,212):
+        header = header + ',' + header_string
+    np.savetxt('./data/train.csv', new_data, delimiter=',', header=header)
 
 # 8-folds cross validation
 def cross_validation_score(train, label):
@@ -204,11 +208,28 @@ def train_different_gabor_filter(img_size, file_path):
         count += 1
     # plt.show()
 
+# 留一交叉验证
+def leave_one_out_cross_validation():
+    train_x = pd.read_csv('./data/train.csv').values
+    train_y = pd.read_csv('./data/label.csv').values
+    leave_one = cross_validation.LeaveOneOut(213)
+    model = joblib.load('./model/svm.pkl')
+    result = 0
+    for train_index, test_index in leave_one:
+        # print train_index
+        train__x, train__y = train_x[train_index], train_y[train_index]
+        test__x, test__y = train_x[test_index], train_y[test_index]
+        model.fit(train__x, train__y)
+        res = model.predict(test__x)
+        result += res == test__y
+        # print res, test__y, res == test__y
+    print result / 213.
 
 if __name__ == '__main__':
     # for i in np.arange(2.5, 12.5, 2):
     #     print i
     get_model()
+    # leave_one_out_cross_validation()
     # for i in range(1,10):
     #     train_different_svm()
     # print 'rbf', sum(rbf_score) / len(rbf_score)
