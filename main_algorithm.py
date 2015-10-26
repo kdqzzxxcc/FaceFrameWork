@@ -29,7 +29,7 @@ def init():
 # 5个尺度 8 个方向的 gabor filter
 def build_filter(img_size):
     filters = []
-    for lamd in np.arange(1, 16, 3 ):
+    for lamd in np.arange(np.pi, np.pi * 4, 3 * np.pi / 5):
         for thea in np.arange(0, np.pi, np.pi / 8):
             kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=10, psi=0.5, ktype=cv2.CV_32F)
             kern /= 1.5 * kern.sum()
@@ -146,7 +146,7 @@ def train_different_svm():
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
-    print "rbf kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    print "rbf kernel",sum(scores) / len(scores)
     rbf_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -155,7 +155,7 @@ def train_different_svm():
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
-    print "linear kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    print "linear kernel",sum(scores) / len(scores)
     linear_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -164,7 +164,7 @@ def train_different_svm():
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
-    print "poly kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    print "poly kernel",sum(scores) / len(scores)
     poly_score.append(sum(scores)/ len(scores))
 
     svc = SVC(C=100, cache_size=500, class_weight='auto', coef0=0.0, degree=3, gamma=1.0000000000000001e-04,
@@ -173,7 +173,7 @@ def train_different_svm():
     model = OneVsRestClassifier(svc)
     model.fit(train_x, train_y)
     scores = cross_validation.cross_val_score(estimator=model, cv=kfold, n_jobs=4, X=train_x, y=train_y)
-    print "sigmoid kernel",sum(scores) / len(scores), model.score(train_x, train_y)
+    print "sigmoid kernel",sum(scores) / len(scores)
     sigmoid_score.append(sum(scores)/ len(scores))
 
 
@@ -181,9 +181,9 @@ def train_different_gabor_filter(img_size, file_path):
     filters = []
     count = 1
     # plt.figure(1)
-    for lamd in np.arange(np.pi, 2 * np.pi, np.pi / 5):
+    for lamd in np.arange(3, 13, 2):
         for thea in np.arange(0, np.pi, np.pi / 8):
-            kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=5, psi=0, ktype=cv2.CV_32F)
+            kern = cv2.getGaborKernel((img_size, img_size), sigma=4, theta=thea, lambd=lamd, gamma=0.5, psi=0, ktype=cv2.CV_32F)
             kern /= 1.5 * kern.sum()
             filters.append(kern)
             print kern
